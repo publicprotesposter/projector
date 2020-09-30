@@ -7,7 +7,7 @@ class Projector{
         this.posters = []
         this.currentPosterIndex = 0
         this.fecthInterval = 60000
-        this.switchInterval = 5000
+        this.switchInterval = 20000
         setInterval( ( ) => this.fetch(), this.fecthInterval )
         setInterval( ( ) => this.switch(), this.switchInterval )
         this.fetch()
