@@ -3,16 +3,42 @@ import svg from './svg.svg'
 import 'regenerator-runtime/runtime'
 
 
+gapi.load('client:auth2', init);
 
-gapi.load('client', init);
-
+// gapi.load('client', init);
 async function init() {
-  // 2. Initialize the JavaScript client library.
-  gapi.client.setApiKey('AIzaSyC8y5mzWn4GeKgezS4_s1j0OZ4wg5cATVY' );
-  await gapi.client.init({
-    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']
-  });
-  new Projector()
+    gapi.client.setApiKey('AIzaSyBaLx1pf7T2E0ANuktHCAXDu9bfIpGU4X8')
+    gapi.client.init({
+        apiKey: 'AIzaSyBaLx1pf7T2E0ANuktHCAXDu9bfIpGU4X8',
+        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+        clientId: '287520759621-qhdchtaia0lrmvkqtfgjhsjc5tmgsch8.apps.googleusercontent.com',
+        scope: 'https://www.googleapis.com/auth/drive'
+    }).then(function () {
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+        
+        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get())
+        
+
+        
+        // try {
+
+        //     gapi.client.drive.files.get({
+        //         fileId: '1-HNMkki3uaIxktLslMrvFVF19azlRfdQ',
+        //         alt: "media"
+        //       }).then( (res) => {
+                
+
+        //         console.log(res.body)
+        //       });
+        //   } catch (e) {
+        //     console.error(e);
+        //   }
+    });
+}
+
+function updateSigninStatus(isSignedIn) {
+    if( isSignedIn ) new Projector()
+    else gapi.auth2.getAuthInstance().signIn();
 }
 
 class Projector{
@@ -34,16 +60,13 @@ class Projector{
         p.setAttribute('d', firma )
         p.setAttribute('fill', '#ffffff' )
 
-        // var url = "https://www.googleapis.com/drive/v2/files?id=" + id + "&key=AIzaSyC8y5mzWn4GeKgezS4_s1j0OZ4wg5cATVY&orderBy=modifiedDate desc";
-        // fetch(url).then(function(response) { return response.json(); }).then( (myJson) => {
-        //     console.log( myJson )
-        // })
-
         try {
-
+            
             gapi.client.drive.files.get({
+                apiKey: 'AIzaSyBaLx1pf7T2E0ANuktHCAXDu9bfIpGU4X8',
                 fileId: id,
-                alt: "media"
+                alt: "media",
+                clientId: '287520759621-qhdchtaia0lrmvkqtfgjhsjc5tmgsch8.apps.googleusercontent.com',
               }).then( (res) => {
                 
                 
@@ -75,29 +98,6 @@ class Projector{
           } catch (e) {
             console.error(e);
           }
-
-        // fetch( 'https://cors-anywhere.herokuapp.com/https://drive.google.com/uc?id=' + id ).then(function(response) { return response.text(); }).then( ( s ) => { 
-        //     var doc = new DOMParser().parseFromString( s, "image/svg+xml");
-        //     var poster = doc.querySelector( 'svg' )
-        //     var [ w, h ] = [ poster.getAttribute( 'width' ), poster.getAttribute( 'height' ) ]
-        //     var [ sw, sh ] = [ window.innerWidth, window.innerHeight ]
-
-        //     var ar = h / w
-        //     var sar = sh / sw
-        //     var ratio = null
-        //     if( ar > sar ) ratio = sh / h
-        //     else ratio = sw / w
-            
-        //     var tx = ( sw - w * ratio ) / 2
-        //     var ty = ( sh - h * ratio ) / 2
-        //     poster.style.transform = 'translate3d( ' + tx + 'px, ' + ty + 'px, 0px) scale( ' + ratio + ')'
-        //     poster.appendChild( p )
-        //     document.body.appendChild( poster )
-        //     var activePosters = document.querySelectorAll( 'svg.active' )
-        //     Object.values( activePosters ).forEach( p => p.classList.remove( 'active' ) )
-        //     setTimeout( () => poster.classList.add( 'active' ), 1 )
-        //     this.currentPosterIndex++
-        // } ) 
     }
 
     switch(){
@@ -128,4 +128,3 @@ class Projector{
         console.log( 'fetch' )
     }
 }
-// new Projector()
