@@ -47,7 +47,7 @@ class Projector{
               }).then( (res) => {
                 
                 
-
+                console.log('downloaded')
                 var doc = new DOMParser().parseFromString( res.body, "image/svg+xml");
                 var poster = doc.querySelector( 'svg' )
                 var [ w, h ] = [ poster.getAttribute( 'width' ), poster.getAttribute( 'height' ) ]
